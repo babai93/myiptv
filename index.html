@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv='Cache-control' content='no-cache'>
+		<title>myiptv</title>
+		
+		<script type="text/javascript">
+			(function () {
+				var samsungRuntime = /SMART-TV|Tizen|Maple/i.test(navigator.userAgent) || location.protocol === 'widget:' || location.protocol === 'file:';
+				if (!samsungRuntime) return;
+				document.write('<script src="$MANAGER_WIDGET/Common/API/Widget.js"><\/script>');
+				document.write('<script src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"><\/script>');
+				document.write('<script src="$MANAGER_WIDGET/Common/jquery.js"><\/script>');
+				document.write('<script src="$MANAGER_WIDGET/Common/API/Plugin.js"><\/script>');
+				document.write('<script src="$MANAGER_WIDGET/Common/webapi/1.0/webapis.js"><\/script>');
+			})();
+		</script>
+		
+		<!-- TODO : Javascript code -->
+		<link href="https://vjs.zencdn.net/8.23.4/video-js.css" rel="stylesheet">
+		<script src="https://vjs.zencdn.net/8.23.4/video.min.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/Main.js?v=20261029-clean-names"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/samsungplayer.js?v=videojs"></script>
+		
+		<!-- TODO : Style sheets code -->
+		<link rel="stylesheet" href="app/stylesheets/Main.css" type="text/css">
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="manifest" href="/site.webmanifest">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" data-fonts-preconnect="">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" data-landing-fonts="">
+
+		
+		<!-- TODO: Plugins -->			
+		<object id="pluginObjectTVMW" border=0 classid="clsid:SAMSUNG-INFOLINK-TVMW" style="width: 0; height: 0; opacity: 0;" /></object>
+		<object id="pluginObjectNNavi" border=0 classid="clsid:SAMSUNG-INFOLINK-NNAVI" style="width: 0; height: 0; opacity: 0;" /></object>
+		
+	</head>
+
+	<body onload="Main.onLoad();" onunload="Main.onUnload();">
+		<a href="javascript:void(0);" id="anchor" onkeydown="Main.keyDown(event);"></a>
+		<div class="app-shell">
+			<header class="topbar">
+				<div class="brand"><span class="brand-mark">▶</span><span>my<span>iptv</span></span></div>
+				<div class="topbar-title">Live television</div>
+				<div class="sync-controls"><div id="sync-status" class="status-pill"><span></span><span class="sync-label">Last sync: waiting</span></div><button id="refresh-channels" class="refresh-button" type="button" aria-label="Refresh channel list" title="Refresh channel list">↻</button></div>
+			</header>
+			<main class="content-grid">
+				<aside class="channel-sidebar">
+					<div class="sidebar-heading"><div><h1>Channels</h1><span id="channel-count">Loading…</span></div><div class="live-dot"></div></div>
+					<label class="search-box"><span>⌕</span><input id="channel-search" type="search" placeholder="Search channels"></label>
+					<select id="category-filter" class="category-filter"><option value="">All categories</option></select>
+					<div class="category-title">CATEGORIES <span id="category-count"></span></div>
+					<div id="category-list" class="category-list"></div>
+					<div id="channel-list" class="channel-list"></div>
+				</aside>
+				<section class="channels-column">
+					<div class="page-heading"><div><p class="eyebrow">LIVE TV</p><h2>Choose a channel</h2></div><span class="hint">Select a channel to start watching</span></div>
+					<div id="channel-grid" class="channel-grid"></div>
+					<div id="channel-pagination" class="channel-pagination" aria-label="Channel pages"></div>
+				</section>
+			</main>
+		</div>
+		<div id="player-modal" class="player-modal" aria-hidden="true">
+			<div class="player-dialog" role="dialog" aria-modal="true" aria-label="Live channel player">
+				<button id="player-close" class="player-close" type="button" aria-label="Close player">×</button>
+				<div id="player-container"></div>
+				<div id="loading">LOADING...</div>
+				<div class="now-playing"><div class="now-playing-main"><img id="channel-logo" class="now-playing-logo" alt="" referrerpolicy="no-referrer" onerror="handleLogoError(this)"><div class="now-playing-copy"><div id="channel-name">Choose a channel</div><div class="now-label">NOW PLAYING</div></div></div>
+				<div class="player-shortcuts" aria-label="Player shortcuts"><span><kbd>Esc</kbd> close</span><span><kbd>Space</kbd> play/pause</span><span><kbd>F</kbd> fullscreen</span><span><kbd>M</kbd> mute</span><span><kbd>←</kbd><kbd>→</kbd> seek 10s</span></div></div>
+			</div>
+		</div>
+	</body>
+</html>
