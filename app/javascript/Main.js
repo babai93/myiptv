@@ -154,8 +154,9 @@ function getChannelPageSize() {
 	var grid = document.getElementById('channel-grid');
 	if (!grid) return 1;
 	var viewportWidth = window.innerWidth;
-	var gap = viewportWidth <= 900 ? 10 : 14;
-	var tileHeight = viewportWidth <= 380 ? 190 : (viewportWidth <= 900 ? 160 : 184);
+	var gridStyles = window.getComputedStyle(grid);
+	var gap = parseFloat(gridStyles.rowGap) || 14;
+	var tileHeight = parseFloat(gridStyles.getPropertyValue('--channel-tile-height')) || 170;
 	var columns;
 	if (viewportWidth <= 380) {
 		columns = 1;
@@ -165,7 +166,7 @@ function getChannelPageSize() {
 		columns = Math.max(1, Math.floor((grid.clientWidth + gap) / (190 + gap)));
 	}
 	var gridTop = grid.getBoundingClientRect().top;
-	var availableHeight = Math.max(tileHeight, window.innerHeight - gridTop - 64);
+	var availableHeight = Math.max(tileHeight, window.innerHeight - gridTop - 52);
 	var rows = Math.max(1, Math.floor((availableHeight + gap) / (tileHeight + gap)));
 	return columns * rows;
 }
@@ -308,31 +309,16 @@ function applyFilters() {
 
 function renderCategories() {
 	var filter = document.getElementById('category-filter');
-	var categoryList = document.getElementById('category-list');
-	if (!filter || !categoryList) return;
+	if (!filter) return;
 	var categories = {};
 	allChannels.forEach(function(channel) {
 		channel.categories.forEach(function(category) { categories[category] = true; });
 	});
 	filter.innerHTML = '<option value="">All categories</option>';
-	categoryList.innerHTML = '';
 	var categoryKeys = Object.keys(categories).sort();
 	categoryKeys.forEach(function(category) {
 		filter.innerHTML += '<option value="' + category + '">' + (categoryNames[category] || category) + '</option>';
-		var item = document.createElement('button');
-		item.className = 'category-item';
-		item.textContent = categoryNames[category] || category;
-		item.onclick = function() {
-			filter.value = category;
-			applyFilters();
-			categoryList.querySelectorAll('.category-item').forEach(function(categoryItem) {
-				categoryItem.classList.remove('is-selected');
-			});
-			item.classList.add('is-selected');
-		};
-		categoryList.appendChild(item);
 	});
-	document.getElementById('category-count').textContent = categoryKeys.length;
 	filter.onchange = applyFilters;
 	document.getElementById('channel-search').oninput = applyFilters;
 }

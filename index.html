@@ -49,15 +49,16 @@
 			</header>
 			<main class="content-grid">
 				<aside class="channel-sidebar">
-					<div class="sidebar-heading"><div><h1>Channels</h1><span id="channel-count">Loading…</span></div><div class="live-dot"></div></div>
-					<label class="search-box"><span>⌕</span><input id="channel-search" type="search" placeholder="Search channels"></label>
-					<select id="category-filter" class="category-filter"><option value="">All categories</option></select>
-					<div class="category-title">CATEGORIES <span id="category-count"></span></div>
-					<div id="category-list" class="category-list"></div>
+					<div class="sidebar-heading"><div><h1>Channels</h1><span id="channel-count">Loading…</span>
+					<span class="hint">Select a channel to start watching</span>
+					</div><!--<div class="live-dot"></div>--></div>
+					<div class="sidebar-controls">
+						<label class="search-box"><span>⌕</span><input id="channel-search" type="search" placeholder="Search channels"></label>
+						<select id="category-filter" class="category-filter"><option value="">All categories</option></select>
+					</div>
 					<div id="channel-list" class="channel-list"></div>
 				</aside>
 				<section class="channels-column">
-					<div class="page-heading"><div><p class="eyebrow">LIVE TV</p><h2>Choose a channel</h2></div><span class="hint">Select a channel to start watching</span></div>
 					<div id="channel-grid" class="channel-grid"></div>
 					<div id="channel-pagination" class="channel-pagination" aria-label="Channel pages"></div>
 				</section>
