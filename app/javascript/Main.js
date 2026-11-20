@@ -313,7 +313,14 @@ function renderCategories() {
 		var item = document.createElement('button');
 		item.className = 'category-item';
 		item.textContent = categoryNames[category] || category;
-		item.onclick = function() { filter.value = category; applyFilters(); };
+		item.onclick = function() {
+			filter.value = category;
+			applyFilters();
+			categoryList.querySelectorAll('.category-item').forEach(function(categoryItem) {
+				categoryItem.classList.remove('is-selected');
+			});
+			item.classList.add('is-selected');
+		};
 		categoryList.appendChild(item);
 	});
 	document.getElementById('category-count').textContent = categoryKeys.length;
