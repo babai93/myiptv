@@ -57,13 +57,19 @@ function normalizeCategories(value) {
 	return categories.length ? categories : ['Other'];
 }
 
+function placeholderLogoUrl(channelName) {
+	return 'https://placehold.co/400x200/transparent/FFF?font=oswald&text=' + encodeURIComponent(channelName || 'Channel Name');
+}
+
 function handleLogoError(image) {
 	var fallbackUrl = image.getAttribute('data-fallback-src');
-	if (fallbackUrl && image.src !== fallbackUrl) {
+	var placeholderUrl = image.getAttribute('data-placeholder-src') || placeholderLogoUrl(image.getAttribute('alt'));
+	if (fallbackUrl && image.getAttribute('data-fallback-attempted') !== 'true') {
+		image.setAttribute('data-fallback-attempted', 'true');
 		image.src = fallbackUrl;
 		return;
 	}
-	image.style.visibility = 'hidden';
+	if (image.src !== placeholderUrl) image.src = placeholderUrl;
 }
 
 function parseM3U(text) {
@@ -125,13 +131,15 @@ function renderChannelList() {
 		if (selector) selector.appendChild(option);
 		var item = document.createElement('button');
 		item.className = 'channel-card';
-		item.innerHTML = '<img src="' + (channel.logo || '') + '" data-fallback-src="' + (channel.logoFallback || '') + '" referrerpolicy="no-referrer" onerror="handleLogoError(this)">' +
+		var logoUrl = channel.logo || placeholderLogoUrl(channel.name);
+		var placeholderUrl = placeholderLogoUrl(channel.name);
+		item.innerHTML = '<img src="' + logoUrl + '" data-fallback-src="' + (channel.logoFallback || '') + '" data-placeholder-src="' + placeholderUrl + '" alt="' + channel.name + '" referrerpolicy="no-referrer" onerror="handleLogoError(this)">' +
 			'<span><strong>' + channel.name + '</strong><small>' + channel.categories.join(' · ') + '</small></span>';
 		item.onclick = function() { selectChannel(index); };
 		list.appendChild(item);
 		var card = document.createElement('button');
 		card.className = 'channel-tile';
-		card.innerHTML = '<span class="tile-logo"><img src="' + (channel.logo || '') + '" data-fallback-src="' + (channel.logoFallback || '') + '" referrerpolicy="no-referrer" onerror="handleLogoError(this)" alt=""></span>' +
+		card.innerHTML = '<span class="tile-logo"><img src="' + logoUrl + '" data-fallback-src="' + (channel.logoFallback || '') + '" data-placeholder-src="' + placeholderUrl + '" referrerpolicy="no-referrer" onerror="handleLogoError(this)" alt="' + channel.name + '"></span>' +
 			'<span class="tile-copy"><strong>' + channel.name + '</strong><small>' + channel.categories.join(' · ') + '</small></span><span class="tile-play">▶</span>';
 		card.onclick = function() { selectChannel(index); };
 		grid.appendChild(card);
@@ -246,8 +254,9 @@ function updateNowPlaying(channel) {
 	if (!logo) return;
 	logo.alt = channel.name + ' logo';
 	logo.setAttribute('data-fallback-src', channel.logoFallback || '');
-	logo.style.visibility = channel.logo ? 'visible' : 'hidden';
-	logo.src = channel.logo || '';
+	logo.setAttribute('data-placeholder-src', placeholderLogoUrl(channel.name));
+	logo.style.visibility = 'visible';
+	logo.src = channel.logo || placeholderLogoUrl(channel.name);
 }
 
 function openPlayer() {
